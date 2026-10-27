@@ -8,6 +8,11 @@ function Todos() {
   ])
 
   const [newTodo, setNewTodo] = useState('')
+  const [filter, setFilter] = useState('All')
+
+  const itemsLeft = todos.filter((todo) => !todo.completed).length
+  const allCompleted =
+    todos.length > 0 && todos.every((todo) => todo.completed)
 
   return (
     <section className="mx-auto max-w-[550px]">
@@ -34,68 +39,72 @@ function Todos() {
         </form>
 
         {todos.length > 0 && (
-          <main className="relative border-t border-[#e6e6e6]">            
+          <main className="relative border-t border-[#e6e6e6]">
             <input
-            id="toggle-all"
-            type="checkbox"
-            className="peer sr-only"
-            checked={todos.length > 0 && todos.every((todo) => todo.completed)}
-             onChange={() => {
-                const allCompleted = todos.every((todo) => todo.completed)
-            setTodos(
-            todos.map((todo) => ({
-                ...todo,
-                completed: !allCompleted,
-            })),
-         )
-        }}
-        />
-        <label
-            htmlFor="toggle-all"
-             className="absolute -top-[66px] left-0 flex h-[65px] w-[60px] cursor-pointer items-center justify-center text-[22px] text-[#949494] peer-checked:text-[#484848]"
-        >
-        <span className="rotate-90">❯</span>
-        </label>
-
+              id="toggle-all"
+              type="checkbox"
+              className="peer sr-only"
+              checked={allCompleted}
+              onChange={() => {
+                setTodos(
+                  todos.map((todo) => ({
+                    ...todo,
+                    completed: !allCompleted,
+                  })),
+                )
+              }}
+            />
+            <label
+              htmlFor="toggle-all"
+              className="absolute -top-[66px] left-0 flex h-[65px] w-[60px] cursor-pointer items-center justify-center text-[22px] text-[#949494] peer-checked:text-[#484848]"
+            >
+              <span className="rotate-90">❯</span>
+            </label>
 
             <ul>
-              {todos.map((todo) => (
-                <li
-                  key={todo.id}
-                  className="group relative flex items-center border-b border-[#ededed] text-2xl"
-                >
-                  <input
-                    type="checkbox"
-                    checked={todo.completed}
-                    onChange={() => {
-                      setTodos(
-                        todos.map((t) =>
-                          t.id === todo.id
-                            ? { ...t, completed: !t.completed }
-                            : t,
-                        ),
-                      )
-                    }}
-                    className="ml-[15px] size-[30px] shrink-0 cursor-pointer accent-[#59a193]"
-                  />
-                  <span
-                    className={`flex-1 py-[15px] pr-[60px] pl-[15px] break-all ${
-                      todo.completed ? 'text-[#949494] line-through' : ''
-                    }`}
+              {todos
+                .filter((todo) => {
+                  if (filter === 'Active') return !todo.completed
+                  if (filter === 'Completed') return todo.completed
+                  return true
+                })
+                .map((todo) => (
+                  <li
+                    key={todo.id}
+                    className="group relative flex items-center border-b border-[#ededed] text-2xl"
                   >
-                    {todo.title}
-                  </span>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setTodos(todos.filter((t) => t.id !== todo.id))
-                    }}
-                    className="absolute right-[10px] hidden size-10 cursor-pointer text-[30px] text-[#949494] group-hover:block hover:text-[#c18585]"
-                  >
-                    ×
-                  </button>
-                </li>
-              ))}
+                    <input
+                      type="checkbox"
+                      checked={todo.completed}
+                      onChange={() => {
+                        setTodos(
+                          todos.map((t) =>
+                            t.id === todo.id
+                              ? { ...t, completed: !t.completed }
+                              : t,
+                          ),
+                        )
+                      }}
+                      className="ml-[15px] size-[30px] shrink-0 cursor-pointer accent-[#59a193]"
+                    />
+                    <span
+                      className={`flex-1 py-[15px] pr-[60px] pl-[15px] break-all ${
+                        todo.completed ? 'text-[#949494] line-through' : ''
+                      }`}
+                    >
+                      {todo.title}
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setTodos(todos.filter((t) => t.id !== todo.id))
+                      }}
+                      className="absolute right-[10px] hidden size-10 cursor-pointer text-[30px] text-[#949494] group-hover:block hover:text-[#c18585]"
+                    >
+                      ×
+                    </button>
+                  </li>
+                ))}
             </ul>
           </main>
         )}
@@ -103,19 +112,20 @@ function Todos() {
         {todos.length > 0 && (
           <footer className="grid h-10 grid-cols-3 items-center border-t border-[#e6e6e6] px-[15px] text-[15px]">
             <span>
-              <strong className="font-light">
-                {todos.filter((todo) => !todo.completed).length}
-              </strong>{' '}
-              {todos.filter((todo) => !todo.completed).length === 1
-                ? 'item left'
-                : 'items left'}
+              <strong className="font-light">{itemsLeft}</strong>{' '}
+              {itemsLeft === 1 ? 'item left' : 'items left'}
             </span>
 
             <ul className="flex justify-center gap-1">
               <li>
                 <button
                   type="button"
-                  className="cursor-pointer rounded-[3px] border border-[#b83f45]/20 px-[7px] py-[3px]"
+                  onClick={() => setFilter('All')}
+                  className={
+                    filter === 'All'
+                      ? 'cursor-pointer rounded-[3px] border border-[#b83f45]/20 px-[7px] py-[3px]'
+                      : 'cursor-pointer rounded-[3px] border border-transparent px-[7px] py-[3px] hover:border-[#b83f45]/10'
+                  }
                 >
                   All
                 </button>
@@ -123,7 +133,12 @@ function Todos() {
               <li>
                 <button
                   type="button"
-                  className="cursor-pointer rounded-[3px] border border-transparent px-[7px] py-[3px] hover:border-[#b83f45]/10"
+                  onClick={() => setFilter('Active')}
+                  className={
+                    filter === 'Active'
+                      ? 'cursor-pointer rounded-[3px] border border-[#b83f45]/20 px-[7px] py-[3px]'
+                      : 'cursor-pointer rounded-[3px] border border-transparent px-[7px] py-[3px] hover:border-[#b83f45]/10'
+                  }
                 >
                   Active
                 </button>
@@ -131,7 +146,12 @@ function Todos() {
               <li>
                 <button
                   type="button"
-                  className="cursor-pointer rounded-[3px] border border-transparent px-[7px] py-[3px] hover:border-[#b83f45]/10"
+                  onClick={() => setFilter('Completed')}
+                  className={
+                    filter === 'Completed'
+                      ? 'cursor-pointer rounded-[3px] border border-[#b83f45]/20 px-[7px] py-[3px]'
+                      : 'cursor-pointer rounded-[3px] border border-transparent px-[7px] py-[3px] hover:border-[#b83f45]/10'
+                  }
                 >
                   Completed
                 </button>
