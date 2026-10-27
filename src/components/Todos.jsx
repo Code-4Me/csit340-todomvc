@@ -68,10 +68,13 @@ function Todos() {
                   {todo.title}
                 </span>
                 <button
-                  type="button"
-                  className="absolute right-[10px] hidden size-10 cursor-pointer text-[30px] text-[#949494] group-hover:block hover:text-[#c18585]"
+                    type="button"
+                    onClick={() => {
+                        setTodos(todos.filter((t) => t.id !== todo.id))
+                    }}
+                    className="absolute right-[10px] hidden size-10 cursor-pointer text-[30px] text-[#949494] group-hover:block hover:text-[#c18585]"
                 >
-                  ×
+                    ×
                 </button>
               </li>
             ))}
