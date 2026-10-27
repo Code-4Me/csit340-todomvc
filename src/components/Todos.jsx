@@ -33,7 +33,8 @@ function Todos() {
           />
         </form>
 
-        <main className="relative border-t border-[#e6e6e6]">
+        {todos.length > 0 && (
+         <main className="relative border-t border-[#e6e6e6]">
           <input id="toggle-all" type="checkbox" className="peer sr-only" />
           <label
             htmlFor="toggle-all"
@@ -79,9 +80,11 @@ function Todos() {
               </li>
             ))}
           </ul>
-        </main>
+         </main> 
+        )}
 
-        <footer className="grid h-10 grid-cols-3 items-center border-t border-[#e6e6e6] px-[15px] text-[15px]">
+        {todos.length > 0 && (
+         <footer className="grid h-10 grid-cols-3 items-center border-t border-[#e6e6e6] px-[15px] text-[15px]">
           <span>
             <strong className="font-light">1</strong> item left
           </span>
@@ -119,7 +122,8 @@ function Todos() {
           >
             Clear completed
           </button>
-        </footer>
+         </footer>
+        )}
       </div>
     </section>
   )
