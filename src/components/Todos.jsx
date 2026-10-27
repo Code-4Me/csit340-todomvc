@@ -34,100 +34,107 @@ function Todos() {
         </form>
 
         {todos.length > 0 && (
-         <main className="relative border-t border-[#e6e6e6]">
-          <input id="toggle-all" type="checkbox" className="peer sr-only" />
-          <label
-            htmlFor="toggle-all"
-            className="absolute -top-[66px] left-0 flex h-[65px] w-[60px] cursor-pointer items-center justify-center text-[22px] text-[#949494] peer-checked:text-[#484848]"
-          >
-            <span className="rotate-90">❯</span>
-          </label>
+          <main className="relative border-t border-[#e6e6e6]">
+            <input id="toggle-all" type="checkbox" className="peer sr-only" />
+            <label
+              htmlFor="toggle-all"
+              className="absolute -top-[66px] left-0 flex h-[65px] w-[60px] cursor-pointer items-center justify-center text-[22px] text-[#949494] peer-checked:text-[#484848]"
+            >
+              <span className="rotate-90">❯</span>
+            </label>
 
-          <ul>
-            {todos.map((todo) => (
-              <li
-                key={todo.id}
-                className="group relative flex items-center border-b border-[#ededed] text-2xl"
-              >
-                <input
+            <ul>
+              {todos.map((todo) => (
+                <li
+                  key={todo.id}
+                  className="group relative flex items-center border-b border-[#ededed] text-2xl"
+                >
+                  <input
                     type="checkbox"
                     checked={todo.completed}
                     onChange={() => {
-                        setTodos(
-                            todos.map((t) =>
-                                t.id === todo.id ? { ...t, completed: !t.completed } : t,
-                            ),
-                        )
+                      setTodos(
+                        todos.map((t) =>
+                          t.id === todo.id
+                            ? { ...t, completed: !t.completed }
+                            : t,
+                        ),
+                      )
                     }}
                     className="ml-[15px] size-[30px] shrink-0 cursor-pointer accent-[#59a193]"
-                />
-                <span
-                  className={`flex-1 py-[15px] pr-[60px] pl-[15px] break-all ${
-                    todo.completed ? 'text-[#949494] line-through' : ''
-                  }`}
-                >
-                  {todo.title}
-                </span>
-                <button
+                  />
+                  <span
+                    className={`flex-1 py-[15px] pr-[60px] pl-[15px] break-all ${
+                      todo.completed ? 'text-[#949494] line-through' : ''
+                    }`}
+                  >
+                    {todo.title}
+                  </span>
+                  <button
                     type="button"
                     onClick={() => {
-                        setTodos(todos.filter((t) => t.id !== todo.id))
+                      setTodos(todos.filter((t) => t.id !== todo.id))
                     }}
                     className="absolute right-[10px] hidden size-10 cursor-pointer text-[30px] text-[#949494] group-hover:block hover:text-[#c18585]"
-                >
+                  >
                     ×
-                </button>
-              </li>
-            ))}
-          </ul>
-         </main> 
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </main>
         )}
 
         {todos.length > 0 && (
-         <footer className="grid h-10 grid-cols-3 items-center border-t border-[#e6e6e6] px-[15px] text-[15px]">
-          <span>
-            <strong className="font-light">
+          <footer className="grid h-10 grid-cols-3 items-center border-t border-[#e6e6e6] px-[15px] text-[15px]">
+            <span>
+              <strong className="font-light">
                 {todos.filter((todo) => !todo.completed).length}
-            </strong>{' '}
-            {todos.filter((todo) => !todo.completed).length === 1
+              </strong>{' '}
+              {todos.filter((todo) => !todo.completed).length === 1
                 ? 'item left'
                 : 'items left'}
-          </span>
+            </span>
 
-          <ul className="flex justify-center gap-1">
-            <li>
-              <button
-                type="button"
-                className="cursor-pointer rounded-[3px] border border-[#b83f45]/20 px-[7px] py-[3px]"
-              >
-                All
-              </button>
-            </li>
-            <li>
-              <button
-                type="button"
-                className="cursor-pointer rounded-[3px] border border-transparent px-[7px] py-[3px] hover:border-[#b83f45]/10"
-              >
-                Active
-              </button>
-            </li>
-            <li>
-              <button
-                type="button"
-                className="cursor-pointer rounded-[3px] border border-transparent px-[7px] py-[3px] hover:border-[#b83f45]/10"
-              >
-                Completed
-              </button>
-            </li>
-          </ul>
+            <ul className="flex justify-center gap-1">
+              <li>
+                <button
+                  type="button"
+                  className="cursor-pointer rounded-[3px] border border-[#b83f45]/20 px-[7px] py-[3px]"
+                >
+                  All
+                </button>
+              </li>
+              <li>
+                <button
+                  type="button"
+                  className="cursor-pointer rounded-[3px] border border-transparent px-[7px] py-[3px] hover:border-[#b83f45]/10"
+                >
+                  Active
+                </button>
+              </li>
+              <li>
+                <button
+                  type="button"
+                  className="cursor-pointer rounded-[3px] border border-transparent px-[7px] py-[3px] hover:border-[#b83f45]/10"
+                >
+                  Completed
+                </button>
+              </li>
+            </ul>
 
-          <button
-            type="button"
-            className="cursor-pointer justify-self-end hover:underline"
-          >
-            Clear completed
-          </button>
-         </footer>
+            {todos.some((todo) => todo.completed) && (
+              <button
+                type="button"
+                onClick={() => {
+                  setTodos(todos.filter((todo) => !todo.completed))
+                }}
+                className="cursor-pointer justify-self-end hover:underline"
+              >
+                Clear completed
+              </button>
+            )}
+          </footer>
         )}
       </div>
     </section>
